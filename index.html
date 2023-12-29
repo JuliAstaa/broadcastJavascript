@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        overflow: hidden;
+      }
+
+      .main {
+        width: 100%;
+        min-height: 100vh;
+        position: relative;
+      }
+
+      .circle1 {
+        width: 60px;
+        height: 60px;
+        background-color: red;
+        border-radius: 50%;
+        position: absolute;
+        border: 1px solid black;
+      }
+      .circle2 {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        position: absolute;
+        border: 1px solid black;
+      }
+      .circle3 {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        position: absolute;
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="main">
+      <div id="circle1" class="circle1"></div>
+      <div id="circle2" class="circle2"></div>
+      <div id="circle3" class="circle3"></div>
+    </main>
+
+    <script>
+      const circleChannel = new BroadcastChannel("circle_channel");
+      const circle1 = document.getElementById("circle1");
+      const circle2 = document.getElementById("circle2");
+      const circle3 = document.getElementById("circle3");
+
+      addEventListener("mousemove", (e) => {
+        const x = e.clientX,
+          y = e.clientY;
+
+        circle1.style.top = `${y}px`;
+        circle1.style.right = ``;
+        circle1.style.left = `${x}px`;
+        circle1.style.backgroundColor = `red`;
+
+        setTimeout(() => {
+          circle2.style.top = `${y}px`;
+          circle2.style.right = ``;
+          circle2.style.left = `${x}px`;
+          circle2.style.backgroundColor = `yellow`;
+        }, 100);
+
+        setTimeout(() => {
+          circle3.style.top = `${y}px`;
+          circle3.style.right = ``;
+          circle3.style.left = `${x}px`;
+          circle3.style.backgroundColor = `green`;
+        }, 200);
+
+        circleChannel.postMessage({
+          x,
+          y,
+          color1: "purple",
+          color2: "brown",
+          color3: "blue",
+        });
+      });
+
+      circleChannel.onmessage = (e) => {
+        const { x, y, color1, color2, color3 } = e.data;
+        circle1.style.top = `${y}px`;
+        circle1.style.right = `${x}px`;
+        circle1.style.left = ``;
+        circle1.style.backgroundColor = color1;
+
+        setTimeout(() => {
+          circle2.style.top = `${y}px`;
+          circle2.style.right = `${x}px`;
+          circle2.style.left = ``;
+          circle2.style.backgroundColor = color2;
+        }, 100);
+
+        setTimeout(() => {
+          circle3.style.top = `${y}px`;
+          circle3.style.right = `${x}px`;
+          circle3.style.left = ``;
+          circle3.style.backgroundColor = color3;
+        }, 200);
+      };
+    </script>
+  </body>
+</html>
